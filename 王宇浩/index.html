@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <!-- ============ 基础元信息（SEO） ============ -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>王宇浩 | 个人主页</title>
+  <meta name="description" content="王宇浩，中国科学技术大学学者，专注人工智能与计算机视觉方向的研究与教学。这是王宇浩的个人主页，展示个人简介、研究方向与社交联系方式。">
+  <meta name="keywords" content="王宇浩, 中国科学技术大学, USTC, 学者, 人工智能, 计算机视觉, 个人主页">
+  <meta name="author" content="王宇浩">
+  <meta name="robots" content="index, follow">
+
+  <!-- ============ Open Graph 协议（社交平台分享卡片） ============ -->
+  <meta property="og:title" content="王宇浩 | 个人主页">
+  <meta property="og:type" content="website">
+  <meta property="og:description" content="中国科学技术大学学者，这里是王宇浩的个人主页。">
+  <!-- og:image 为占位图（建议 1200×630 PNG/JPG），部署后替换成你自己的分享封面即可 -->
+  <meta property="og:image" content="https://placehold.co/1200x630/1a1a2e/ffe66d?text=Wang%20Profile">
+  <meta property="og:site_name" content="王宇浩的个人主页">
+
+  <!-- 全部样式/脚本均内联，资源引用为相对路径，离线与线上均可正常运行 -->
+  <style>
+    /* ============================================================
+       全局基础
+       - 深色渐变背景 + 毛玻璃质感
+       - 使用系统默认字体栈，保证离线不报错
+       ============================================================ */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    /* 系统默认字体栈：优先西文优雅字体，其次中文字体，最后兜底 */
+    :root {
+      --font-stack: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+                    "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue",
+                    Arial, sans-serif;
+    }
+
+    body {
+      font-family: var(--font-stack);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      /* 二次元感深色渐变：紫罗兰 → 深蓝 → 暗紫 */
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+      color: #f0e9ff;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* ============================================================
+       背景装饰 —— 二次元风格的漂浮光斑与粒子
+       用纯 CSS 动画营造梦幻感，不依赖任何图片
+       ============================================================ */
+    /* 半透明彩色光斑 */
+    .blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(60px);
+      opacity: 0.35;
+      z-index: 0;
+      animation: float 12s ease-in-out infinite alternate;
+    }
+    .blob-1 { width: 300px; height: 300px; background: #e94560; top: 10%; left: 8%; }
+    .blob-2 { width: 260px; height: 260px; background: #5d2ea6; bottom: 12%; right: 10%; animation-delay: -4s; }
+    .blob-3 { width: 200px; height: 200px; background: #00a8cc; top: 55%; left: 22%; animation-delay: -8s; }
+
+    /* 漂浮小星星 */
+    .star {
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      background: #ffe66d;
+      border-radius: 50%;
+      box-shadow: 0 0 8px 2px rgba(255, 230, 109, 0.7);
+      opacity: 0.7;
+      z-index: 0;
+      animation: twinkle 3s ease-in-out infinite alternate;
+    }
+    .star-1 { top: 18%; right: 20%; animation-delay: 0s; }
+    .star-2 { top: 30%; left: 12%; animation-delay: 1s; }
+    .star-3 { bottom: 25%; left: 45%; animation-delay: 2s; }
+    .star-4 { top: 70%; right: 15%; animation-delay: 0.5s; }
+
+    @keyframes float {
+      from { transform: translateY(0) scale(1); }
+      to   { transform: translateY(-30px) scale(1.08); }
+    }
+    @keyframes twinkle {
+      from { opacity: 0.3; transform: scale(0.8); }
+      to   { opacity: 1;   transform: scale(1.2); }
+    }
+
+    /* ============================================================
+       毛玻璃主卡片
+       ============================================================ */
+    .glass-card {
+      position: relative;
+      z-index: 1;
+      width: min(90vw, 480px);
+      padding: 48px 40px 40px;
+      border-radius: 24px;
+      text-align: center;
+      /* 毛玻璃三要素：半透明背景 + 背景模糊 + 细边框高光 */
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(18px) saturate(160%);
+      -webkit-backdrop-filter: blur(18px) saturate(160%);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+    }
+
+    /* ============================================================
+       1. 头像 —— 用 CSS 画占位圆环，中间放名字首字 “Wang”
+       ============================================================ */
+    .avatar-ring {
+      width: 128px;
+      height: 128px;
+      margin: 0 auto 20px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      /* 渐变色圆环：conic-gradient 形成完整色环 */
+      background: conic-gradient(#e94560, #ffe66d, #00a8cc, #5d2ea6, #e94560);
+      padding: 5px; /* 留出环的宽度 */
+      box-shadow: 0 0 30px rgba(233, 69, 96, 0.45);
+      animation: spin 10s linear infinite; /* 圆环缓慢旋转 */
+    }
+    .avatar-ring .inner {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      /* 内部深色背景承接渐变环，形成“圆环 + 中心”的效果 */
+      background: linear-gradient(135deg, #1a1a2e, #0f3460);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 42px;
+      font-weight: 800;
+      color: #ffe66d;
+      text-shadow: 0 0 12px rgba(255, 230, 109, 0.6);
+      /* 反向旋转，让文字始终水平 */
+      animation: spin-reverse 10s linear infinite;
+    }
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+    @keyframes spin-reverse {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(-360deg); }
+    }
+
+    /* ============================================================
+       2. 个人简介
+       ============================================================ */
+    .role {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: #ffe66d;
+      margin-bottom: 14px;
+    }
+    .bio {
+      font-size: 14.5px;
+      line-height: 1.9;
+      color: rgba(240, 233, 255, 0.78);
+      margin-bottom: 32px;
+      /* 二次元风格的柔和文字阴影 */
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    }
+
+    /* ============================================================
+       3. 社交链接 —— 3 个 SVG 图标按钮，悬停上浮动画
+       ============================================================ */
+    .socials {
+      display: flex;
+      justify-content: center;
+      gap: 18px;
+    }
+    .social-btn {
+      width: 56px;
+      height: 56px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      color: #f0e9ff;
+      text-decoration: none;
+      transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+    }
+    .social-btn svg {
+      width: 24px;
+      height: 24px;
+      fill: currentColor; /* 图标颜色跟随按钮文字色 */
+    }
+    /* 悬停上浮：上移 + 发光 + 变色 */
+    .social-btn:hover {
+      transform: translateY(-8px);
+      background: rgba(255, 255, 255, 0.2);
+      box-shadow: 0 12px 24px rgba(233, 69, 96, 0.35);
+      color: #ffe66d;
+    }
+    /* 不同按钮悬停时使用不同氛围色 */
+    .social-btn.github:hover   { box-shadow: 0 12px 24px rgba(160, 160, 200, 0.4); }
+    .social-btn.twitter:hover  { box-shadow: 0 12px 24px rgba(0, 168, 204, 0.4); }
+    .social-btn.mail:hover     { box-shadow: 0 12px 24px rgba(255, 230, 109, 0.4); }
+
+    /* ============================================================
+       4. 底部版权
+       ============================================================ */
+    footer {
+      position: relative;
+      z-index: 1;
+      margin-top: 28px;
+      font-size: 13px;
+      color: rgba(240, 233, 255, 0.45);
+      letter-spacing: 0.5px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 背景装饰层 -->
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+  <div class="star star-1"></div>
+  <div class="star star-2"></div>
+  <div class="star star-3"></div>
+  <div class="star star-4"></div>
+
+  <!-- 主卡片 -->
+  <main class="glass-card">
+
+    <!-- 1. 头像：CSS 渐变圆环 + 名字首字 -->
+    <div class="avatar-ring">
+      <div class="inner">Wang</div>
+    </div>
+
+    <!-- 2. 个人简介 -->
+    <h1 class="role">中国科学技术大学学者</h1>
+    <p class="bio">
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod
+      tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
+      veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+      commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
+      velit esse cillum dolore eu fugiat nulla pariatur.
+    </p>
+
+    <!-- 3. 社交链接 -->
+    <div class="socials">
+      <!-- GitHub -->
+      <a class="social-btn github" href="#" aria-label="GitHub">
+        <svg viewBox="0 0 24 24">
+          <path d="M12 .5A11.5 11.5 0 0 0 .5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.56 0-.28-.01-1.02-.02-2-3.2.7-3.88-1.54-3.88-1.54-.52-1.33-1.28-1.68-1.28-1.68-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.76 2.7 1.25 3.36.96.1-.75.4-1.25.72-1.54-2.55-.29-5.24-1.28-5.24-5.68 0-1.26.45-2.29 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11.1 11.1 0 0 1 5.79 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.8 1.19 1.83 1.19 3.09 0 4.42-2.7 5.39-5.27 5.67.41.36.78 1.06.78 2.14 0 1.54-.01 2.79-.01 3.17 0 .31.21.68.8.56A11.52 11.52 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5Z"/>
+        </svg>
+      </a>
+      <!-- Twitter / X -->
+      <a class="social-btn twitter" href="#" aria-label="Twitter">
+        <svg viewBox="0 0 24 24">
+          <path d="M18.9 1.15h3.68l-8.04 9.19L24 22.85h-7.41l-5.8-7.58-6.64 7.58H.47l8.6-9.83L0 1.15h7.6l5.24 6.93L18.9 1.15Zm-1.29 19.5h2.04L6.49 3.24H4.3l13.31 17.41Z"/>
+        </svg>
+      </a>
+      <!-- 邮箱 -->
+      <a class="social-btn mail" href="mailto:wang@example.com" aria-label="Email">
+        <svg viewBox="0 0 24 24">
+          <path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Zm0 4.7-8 5-8-5V6.35l8 5 8-5V8.7Z"/>
+        </svg>
+      </a>
+    </div>
+  </main>
+
+  <!-- 4. 底部版权：年份由 JS 自动获取，始终显示当前年份 -->
+  <footer>
+    &copy; <span id="year"></span> Wang · 保留所有权利
+  </footer>
+
+  <script>
+    // 自动填充当前年份，保证年份始终为“今年”
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
