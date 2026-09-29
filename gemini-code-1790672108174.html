@@ -1,0 +1,1075 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>王宇浩 | 中国科学技术大学 · 地球物理学</title>
+  <meta name="description" content="王宇浩，中国科学技术大学地球物理学专业，辅修计算机科学。关注计算地球物理与人工智能交叉领域研究。">
+  <meta name="author" content="王宇浩">
+
+  <style>
+    :root {
+      --bg-image:   url('./bg.jpg');
+      --bg-deep:    #0c0f16;
+      --bg-surface: #131824;
+      --gold:       #c9a76b;
+      --gold-light: #e4c896;
+      --vermillion: #c7512e;
+      --indigo:     #3a5a7c;
+      --sakura:     #f0b8c4;
+      --text:       #e4e0d8;
+      --text-dim:   rgba(228,224,216,0.6);
+      --glass-bg:   rgba(255,255,255,0.035);
+      --glass-border: rgba(255,255,255,0.08);
+      --font:       -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      --font-serif: "Times New Roman", "Noto Serif SC", "Songti SC", serif;
+      --font-mono:  SFMono-Regular, Consolas, Menlo, monospace;
+    }
+
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body {
+      font-family: var(--font);
+      background: var(--bg-deep);
+      color: var(--text);
+      line-height: 1.75;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: ""; position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background:
+        radial-gradient(ellipse at 20% 20%, rgba(201,167,107,0.06) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 70%, rgba(199,81,46,0.05) 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 50%, rgba(58,90,124,0.04) 0%, transparent 70%);
+    }
+
+    .bg-layer {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background-image: var(--bg-image); background-size: cover; background-position: center;
+      opacity: 0.18;
+    }
+
+    /* 桜花飘落动画 */
+    .sakura-container { position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden; }
+    .sakura {
+      position: absolute; top: -40px; width: 14px; height: 14px;
+      background: var(--sakura); border-radius: 50% 0 50% 0; opacity: 0;
+      animation: sakura-fall linear infinite;
+    }
+    .sakura:nth-child(1)  { left:5%;  animation-duration:9s;  animation-delay:0s;  --drift:30px; }
+    .sakura:nth-child(2)  { left:18%; animation-duration:11s; animation-delay:1s;  --drift:-25px; }
+    .sakura:nth-child(3)  { left:35%; animation-duration:10s; animation-delay:4s;  --drift:35px; }
+    .sakura:nth-child(4)  { left:55%; animation-duration:12s; animation-delay:2s;  --drift:-30px; }
+    .sakura:nth-child(5)  { left:75%; animation-duration:8.5s;animation-delay:1.5s;--drift:20px; }
+    .sakura:nth-child(6)  { left:90%; animation-duration:10s; animation-delay:5s;  --drift:-40px; }
+    @keyframes sakura-fall {
+      0%   { transform:translateY(-5vh) translateX(0) rotate(0deg); opacity:0; }
+      5%   { opacity:0.7; }
+      85%  { opacity:0.7; }
+      100% { transform:translateY(105vh) translateX(var(--drift)) rotate(540deg); opacity:0; }
+    }
+
+    /* 导航栏 */
+    .nav { position:fixed; top:0; left:0; right:0; z-index:100; padding:14px 0; transition:all 0.35s; }
+    .nav.scrolled {
+      background: rgba(12,15,22,0.85); backdrop-filter: blur(16px);
+      box-shadow: 0 2px 20px rgba(0,0,0,0.5); padding:10px 0;
+    }
+    .nav-inner { max-width:1080px; margin:0 auto; padding:0 28px; display:flex; align-items:center; justify-content:space-between; }
+    .nav-logo { font-family: var(--font-serif); font-size:26px; font-weight:700; color:var(--gold); letter-spacing:2px; }
+    .nav-links { display:flex; gap:28px; list-style:none; align-items:center; }
+    .nav-links a { color:var(--text-dim); text-decoration:none; font-size:15px; font-weight:500; transition:color 0.25s; }
+    .nav-links a:hover, .nav-links a.active { color:var(--gold); }
+    
+    /* 导航栏计算器突出按钮 */
+    .nav-calc-btn {
+      background: rgba(201,167,107,0.15); border: 1px solid rgba(201,167,107,0.4);
+      color: var(--gold-light) !important; padding: 4px 14px; border-radius: 20px; font-size: 13.5px;
+      cursor: pointer; transition: all 0.25s;
+    }
+    .nav-calc-btn:hover { background: rgba(201,167,107,0.3); box-shadow: 0 0 12px rgba(201,167,107,0.3); }
+
+    .hamburger { display:none; flex-direction:column; gap:5px; cursor:pointer; background:none; border:none; padding:4px; }
+    .hamburger span { display:block; width:24px; height:2px; background:var(--gold); border-radius:2px; }
+
+    /* 通用布局 */
+    section { position:relative; z-index:1; padding:80px 28px; }
+    .container { max-width:860px; margin:0 auto; }
+    .section-label { font-size:13px; text-transform:uppercase; letter-spacing:3px; color:var(--vermillion); margin-bottom:8px; font-weight:600; }
+    .section-title { font-family: var(--font-serif); font-size:clamp(28px,5vw,40px); font-weight:700; color:#fff; margin-bottom:12px; }
+    .kugiri { display:flex; align-items:center; gap:12px; margin-bottom:36px; }
+    .kugiri::before, .kugiri::after { content:""; flex:1; height:1px; background:rgba(255,255,255,0.15); }
+    .kugiri::before { max-width:40px; }
+    .kugiri .diamond { width:7px; height:7px; background:var(--gold); transform:rotate(45deg); flex-shrink:0; }
+
+    /* 修复原模板中的不可见隐患：默认可见，动画正常过渡 */
+    .reveal {
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .js-reveal-ready .reveal:not(.visible) {
+      opacity: 0;
+      transform: translateY(28px);
+    }
+    .reveal.visible { opacity:1; transform:translateY(0); }
+
+    /* Hero */
+    .hero { min-height:100vh; display:flex; align-items:center; justify-content:center; text-align:center; padding-top:60px; }
+    .hero .container { max-width:680px; }
+    .avatar { width:130px; height:130px; margin:0 auto 30px; position:relative; }
+    .avatar-ring {
+      width:100%; height:100%; border-radius:50%;
+      background:conic-gradient(var(--vermillion), var(--gold), var(--indigo), var(--sakura), var(--vermillion));
+      padding:4px; animation:spin 12s linear infinite; box-shadow: 0 0 40px rgba(199,81,46,0.35);
+    }
+    .avatar-ring .inner {
+      width:100%; height:100%; border-radius:50%; background:linear-gradient(135deg, #131824, #0c0f16);
+      display:flex; align-items:center; justify-content:center; animation:spin-reverse 12s linear infinite;
+    }
+    .avatar-ring .inner span { font-family: var(--font-serif); font-size:44px; font-weight:800; color:var(--gold); }
+    @keyframes spin { to { transform:rotate(360deg); } }
+    @keyframes spin-reverse { to { transform:rotate(-360deg); } }
+
+    .hero h1 { font-family: var(--font-serif); font-size:clamp(36px,7vw,60px); font-weight:800; color:#fff; letter-spacing:3px; margin-bottom:10px; }
+    .hero .tagline { font-size:17px; color:var(--text-dim); letter-spacing:2px; margin-bottom:10px; }
+    .hero .affiliation { font-size:15px; color:var(--gold); letter-spacing:1px; }
+
+    /* 关于我 */
+    #about { padding-top:40px; padding-bottom:90px; }
+    .about-card {
+      background:var(--glass-bg); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+      border:1px solid var(--glass-border); border-radius:20px; padding:40px 36px; box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    }
+    .about-card p { font-size:15.5px; color:var(--text-dim); line-height:2; text-align:justify; }
+    .about-highlights { display:grid; grid-template-columns:repeat(3, 1fr); gap:20px; margin-top:32px; }
+    .highlight-item { text-align:center; }
+    .highlight-item .num { font-family:var(--font-serif); font-size:30px; font-weight:700; color:var(--gold); }
+    .highlight-item .label { font-size:13px; color:var(--text-dim); margin-top:4px; letter-spacing:1px; }
+
+    /* 研究方向 */
+    #research { padding-top:20px; padding-bottom:90px; }
+    .research-grid { display:grid; grid-template-columns:repeat(2, 1fr); gap:24px; }
+    .research-card {
+      background:var(--glass-bg); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+      border:1px solid var(--glass-border); border-radius:18px; padding:32px 28px;
+      transition:transform 0.35s ease, border-color 0.35s; cursor:default;
+    }
+    .research-card:hover { transform:translateY(-6px); border-color:rgba(201,167,107,0.3); }
+    .research-card .icon { font-size:40px; margin-bottom:14px; display:block; }
+    .research-card h3 { font-size:19px; font-weight:700; color:#fff; margin-bottom:8px; }
+    .research-card p { font-size:14px; color:var(--text-dim); line-height:1.8; }
+
+    /* 资料下载 */
+    #downloads { padding-top:20px; padding-bottom:90px; }
+    .download-grid { display:flex; flex-direction:column; gap:16px; }
+    .download-card {
+      display:flex; align-items:center; gap:20px; background:var(--glass-bg);
+      backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+      border:1px solid var(--glass-border); border-radius:16px; padding:22px 28px;
+    }
+    .download-card .file-icon { font-size:36px; flex-shrink:0; width:52px; text-align:center; }
+    .download-card .file-info { flex:1; min-width:0; }
+    .download-card .file-info h4 { font-size:16px; font-weight:700; color:#fff; margin-bottom:4px; }
+    .download-card .file-info p { font-size:13px; color:var(--text-dim); }
+    .download-btn {
+      display:flex; align-items:center; gap:8px; flex-shrink:0; padding:10px 20px; border-radius:10px;
+      background:rgba(201,167,107,0.12); border:1px solid rgba(201,167,107,0.25); color:var(--gold);
+      text-decoration:none; font-size:14px; font-weight:600; cursor:pointer;
+    }
+    .download-btn:hover { background:rgba(201,167,107,0.25); }
+
+    /* 开源项目 */
+    #projects { padding-top:20px; padding-bottom:90px; }
+    .project-grid { display:grid; grid-template-columns:repeat(2, 1fr); gap:20px; }
+    .project-card {
+      background:var(--glass-bg); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+      border:1px solid var(--glass-border); border-radius:16px; padding:24px; display:flex; flex-direction:column;
+    }
+    .project-card .repo-name { font-size:17px; font-weight:700; color:var(--gold); margin-bottom:8px; display:flex; align-items:center; gap:8px; }
+    .project-card .repo-desc { font-size:13.5px; color:var(--text-dim); line-height:1.7; flex:1; margin-bottom:14px; }
+
+    /* 联系方式 */
+    #contact { padding-top:20px; padding-bottom:80px; }
+    .social-grid { display:flex; justify-content:center; gap:24px; flex-wrap:wrap; }
+    .social-btn {
+      display:flex; align-items:center; gap:12px; padding:16px 28px; border-radius:14px;
+      background:var(--glass-bg); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+      border:1px solid var(--glass-border); color:var(--text); text-decoration:none; font-size:15px; font-weight:600;
+    }
+    .social-btn svg { width:22px; height:22px; fill:currentColor; }
+
+    footer { text-align:center; padding:32px 28px; border-top:1px solid rgba(255,255,255,0.06); color:var(--text-dim); font-size:13px; }
+    footer em { font-style:normal; color:var(--gold); }
+
+    /* =========================================================
+       弹窗 / 抽屉式仿真计算器（和風 Modal）
+       既不挤占主页布局，又能随叫随到，完美适配手机全键盘
+       ========================================================= */
+    .calc-modal-overlay {
+      position: fixed; inset: 0; z-index: 999; background: rgba(8,11,18,0.78);
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      display: none; align-items: center; justify-content: center; padding: 14px;
+    }
+    .calc-modal-overlay.open { display: flex; }
+
+    .calc-modal {
+      width: 100%; max-width: 980px; max-height: 92vh; background: #111622;
+      border: 1px solid rgba(201,167,107,0.3); border-radius: 18px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.7); display: flex; flex-direction: column;
+      overflow: hidden; animation: modalPop 0.25s ease-out;
+    }
+    @keyframes modalPop {
+      from { transform: scale(0.96); opacity: 0; }
+      to   { transform: scale(1); opacity: 1; }
+    }
+
+    .modal-header {
+      padding: 12px 18px; border-bottom: 1px solid rgba(255,255,255,0.08);
+      display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.25);
+    }
+    .modal-header h3 { font-size: 15px; color: var(--gold); display: flex; align-items: center; gap: 8px; }
+    .close-modal-btn {
+      background: none; border: none; color: var(--text-dim); font-size: 22px; cursor: pointer;
+      line-height: 1; padding: 4px;
+    }
+    .close-modal-btn:hover { color: #fff; }
+
+    .modal-body {
+      flex: 1; overflow-y: auto; padding: 16px;
+      display: grid; grid-template-columns: 1.15fr 1.25fr; gap: 16px;
+    }
+    @media (max-width: 860px) {
+      .modal-body { grid-template-columns: 1fr; }
+    }
+
+    /* 计算器 LCD 屏显 */
+    .calc-lcd {
+      background: #080c14; border: 1px solid rgba(201,167,107,0.3); border-radius: 10px;
+      padding: 10px 14px; margin-bottom: 12px; display: flex; flex-direction: column; gap: 4px;
+    }
+    .lcd-status-line { display: flex; justify-content: space-between; font-size: 11px; color: var(--gold); }
+    .lcd-sub-line { font-size: 12.5px; color: var(--text-dim); font-family: var(--font-mono); min-height: 18px; word-break: break-all; }
+    .lcd-main-line { font-size: 19px; font-weight: 700; color: #fff; font-family: var(--font-mono); overflow-x: auto; white-space: nowrap; }
+
+    /* 原生输入控件（完美呼出手机键盘） */
+    .calc-input {
+      width: 100%; height: 36px; background: rgba(0,0,0,0.35); border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 6px; padding: 0 10px; color: #fff; font-size: 13.5px; font-family: var(--font-mono);
+      outline: none; transition: border-color 0.2s;
+    }
+    .calc-input:focus { border-color: var(--gold); background: rgba(19,24,36,0.9); }
+
+    /* 指令按键组 */
+    .op-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; margin-bottom: 10px; }
+    .op-btn {
+      height: 32px; background: rgba(58,90,124,0.22); border: 1px solid rgba(58,90,124,0.45);
+      color: #e4e0d8; font-size: 12px; font-weight: 600; border-radius: 6px; cursor: pointer;
+    }
+    .op-btn:hover { background: rgba(201,167,107,0.25); border-color: var(--gold); color: #fff; }
+    .op-btn.warn { background: rgba(199,81,46,0.2); border-color: rgba(199,81,46,0.4); color: #ffb8a6; }
+
+    /* 触控虚拟按键网格 */
+    .soft-pad { display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; }
+    .key-btn {
+      height: 36px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.12);
+      color: #fff; font-size: 13.5px; font-weight: 600; border-radius: 6px; cursor: pointer;
+    }
+    .key-btn:hover { background: rgba(201,167,107,0.2); border-color: var(--gold); }
+    .key-btn.num { font-weight: 700; background: rgba(255,255,255,0.07); }
+    .key-btn.action-eval {
+      grid-column: span 2; background: linear-gradient(135deg, rgba(201,167,107,0.35), rgba(199,81,46,0.35));
+      border-color: var(--gold); font-weight: 700; color: #fff;
+    }
+
+    /* 多项式链表卡片 */
+    .poly-box {
+      background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 10px; padding: 10px; display: flex; flex-direction: column; gap: 8px;
+    }
+    .poly-card-item {
+      background: rgba(19,24,36,0.7); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 8px; padding: 8px 10px; font-size: 12px;
+    }
+    .poly-card-item.sel-a { border: 1.5px solid var(--gold); }
+    .poly-card-item.sel-b { border: 1.5px solid var(--vermillion); }
+    .chain-txt {
+      font-family: var(--font-mono); font-size: 11px; background: rgba(0,0,0,0.3);
+      padding: 4px; border-radius: 4px; color: var(--text-dim); overflow-x: auto; white-space: nowrap; margin: 4px 0;
+    }
+
+    .pill-btn {
+      padding: 2px 7px; font-size: 11px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.15);
+      background: rgba(255,255,255,0.04); color: var(--text); cursor: pointer;
+    }
+    .pill-btn:hover { background: rgba(201,167,107,0.2); border-color: var(--gold); color: #fff; }
+
+    @media (max-width:768px) {
+      .nav-links { display:none; }
+      .hamburger { display:flex; }
+      .research-grid, .project-grid, .about-highlights { grid-template-columns:1fr; }
+      section { padding:60px 20px; }
+      .hero h1 { font-size:36px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 桜花动效 -->
+  <div class="sakura-container" aria-hidden="true">
+    <div class="sakura"></div><div class="sakura"></div><div class="sakura"></div>
+    <div class="sakura"></div><div class="sakura"></div><div class="sakura"></div>
+  </div>
+
+  <div class="bg-layer" aria-hidden="true"></div>
+
+  <!-- 导航栏 -->
+  <nav class="nav" id="navbar">
+    <div class="nav-inner">
+      <span class="nav-logo">Nature_wang</span>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#home" class="active">首页</a></li>
+        <li><a href="#about">关于</a></li>
+        <li><a href="#research">研究</a></li>
+        <li><a href="#downloads">资料</a></li>
+        <li><a href="#projects">项目</a></li>
+        <li><a href="#contact">联系</a></li>
+        <!-- 点击直接拉起仿真运算器弹窗 -->
+        <li><button class="nav-calc-btn" onclick="openCalcModal()">⚡ 实验仿真器</button></li>
+      </ul>
+      <button class="hamburger" id="hamburger" aria-label="菜单">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- 英雄区（Hero） -->
+  <section class="hero" id="home">
+    <div class="container">
+      <div class="avatar">
+        <div class="avatar-ring">
+          <div class="inner"><span>W</span></div>
+        </div>
+      </div>
+      <h1>王 宇 浩</h1>
+      <p class="tagline">地球物理学 · 计算机科学</p>
+      <p class="affiliation">🏛 中国科学技术大学</p>
+    </div>
+  </section>
+
+  <!-- 关于我（自己紹介） -->
+  <section id="about">
+    <div class="container reveal">
+      <p class="section-label">自己紹介</p>
+      <h2 class="section-title">关于我</h2>
+      <div class="kugiri"><div class="diamond"></div></div>
+
+      <div class="about-card">
+        <p>
+          中国科学技术大学地球物理学专业本科生，辅修计算机科学与技术。
+          对计算地球物理、地震波模拟与人工智能在地球科学中的交叉应用充满热情。
+          致力于将现代数值计算方法和机器学习技术引入传统地球物理研究，
+          探索数据驱动的地球科学新范式。课余时间热爱编程与开源项目，
+          相信跨学科思维能带来独特的科研视角与创新突破。
+        </p>
+        <div class="about-highlights">
+          <div class="highlight-item">
+            <div class="num">地球物理学</div>
+            <div class="label">主修专业</div>
+          </div>
+          <div class="highlight-item">
+            <div class="num">计算机科学</div>
+            <div class="label">辅修学位</div>
+          </div>
+          <div class="highlight-item">
+            <div class="num">USTC</div>
+            <div class="label">所属院校</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 研究方向（研究） -->
+  <section id="research">
+    <div class="container reveal">
+      <p class="section-label">Research</p>
+      <h2 class="section-title">研究方向</h2>
+      <div class="kugiri"><div class="diamond"></div></div>
+
+      <div class="research-grid">
+        <div class="research-card">
+          <span class="icon">🌍</span>
+          <h3>地震学</h3>
+          <p>研究地震波传播机制、震源物理与强地面运动模拟，利用观测数据反演地球内部速度结构。</p>
+        </div>
+        <div class="research-card">
+          <span class="icon">⛏️</span>
+          <h3>地球物理勘探</h3>
+          <p>综合利用重力、磁法、电法与人工源地震勘探技术，研究地下介质结构与高精度成像方法。</p>
+        </div>
+        <div class="research-card">
+          <span class="icon">💻</span>
+          <h3>计算地球物理</h3>
+          <p>波动方程正演建模、全波形反演与高性能数值计算算法研究。</p>
+        </div>
+        <div class="research-card">
+          <span class="icon">📊</span>
+          <h3>数据科学与AI</h3>
+          <p>机器学习与深度学习在地震信号处理、地学大数据挖掘与交叉领域的应用探索。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 资料下载 -->
+  <section id="downloads">
+    <div class="container reveal">
+      <p class="section-label">Downloads</p>
+      <h2 class="section-title">资料下载</h2>
+      <div class="kugiri"><div class="diamond"></div></div>
+
+      <div class="download-grid">
+        <div class="download-card">
+          <span class="file-icon">📄</span>
+          <div class="file-info">
+            <h4>个人简历 / CV</h4>
+            <p>PDF 格式 · 中英文 · 最新版本</p>
+          </div>
+          <a class="download-btn" href="./files/cv.pdf" download data-file="cv">下载</a>
+        </div>
+        <div class="download-card">
+          <span class="file-icon">📑</span>
+          <div class="file-info">
+            <h4>研究论文</h4>
+            <p>PDF 格式 · 学术预印本</p>
+          </div>
+          <a class="download-btn" href="./files/paper.pdf" download data-file="paper">下载</a>
+        </div>
+        <div class="download-card">
+          <span class="file-icon">📦</span>
+          <div class="file-info">
+            <h4>课程项目：稀疏多项式运算器</h4>
+            <p>支持 1~14 项多项式运算与全键盘/手机触控仿真</p>
+          </div>
+          <!-- 快捷拉起在线演示 -->
+          <button class="download-btn" onclick="openCalcModal()">⚡ 在线运行</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 开源项目 -->
+  <section id="projects">
+    <div class="container reveal">
+      <p class="section-label">Open Source</p>
+      <h2 class="section-title">开源项目</h2>
+      <div class="kugiri"><div class="diamond"></div></div>
+
+      <div class="project-grid" id="repoGrid">
+        <div class="project-card">
+          <div class="repo-name">Sparse-Polynomial-Calculator</div>
+          <div class="repo-desc">数据结构实验一：稀疏一元多项式运算器，单链表带头结点实现，覆盖加减乘除、微分、积分及四则解析。</div>
+          <div style="margin-top:auto;"><button class="pill-btn" onclick="openCalcModal()">👉 启动仿真演示</button></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 联系方式 -->
+  <section id="contact">
+    <div class="container reveal">
+      <p class="section-label">Connect</p>
+      <h2 class="section-title">联系方式</h2>
+      <div class="kugiri"><div class="diamond"></div></div>
+
+      <div class="social-grid">
+        <a class="social-btn github" href="https://github.com/scientistwang" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="social-btn twitter" href="https://x.com/FamsGen78408" target="_blank" rel="noopener noreferrer">Twitter</a>
+        <a class="social-btn email" href="mailto:wang_nature@qq.com">邮箱</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 底部 -->
+  <footer>
+    <p>&copy; <span id="year"></span> 王宇浩 · <em>中国科学技术大学 · 地球物理学 + 计算机科学</em> · 保留所有权利</p>
+  </footer>
+
+  <!-- ============================================================
+       抽屉式计算器弹窗（手机端/电脑端均能丝滑弹出，支持软硬键盘）
+       ============================================================ -->
+  <div class="calc-modal-overlay" id="calcModalOverlay" onclick="closeCalcModal(event)">
+    <div class="calc-modal" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <h3><span>🧮</span> 稀疏一元多项式运算器（实验仿真平台）</h3>
+        <button class="close-modal-btn" onclick="closeCalcModal()">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <!-- 左栏：显示屏、四则输入、参数设置与按键 -->
+        <div>
+          <!-- LCD 屏显 -->
+          <div class="calc-lcd">
+            <div class="lcd-status-line">
+              <span id="lcdStatus">就绪</span>
+              <span id="lcdSelNotice" style="color:var(--text-dim);">A=未选, B=未选</span>
+            </div>
+            <div class="lcd-sub-line" id="lcdSub">点击右侧多项式或输入四则算式</div>
+            <div class="lcd-main-line" id="lcdMain">0</div>
+            <div style="display:flex; justify-content:flex-end; gap:6px; margin-top:4px;">
+              <button class="pill-btn" onclick="saveResultToP()">📥 存为新多项式</button>
+              <button class="pill-btn" onclick="toggleSortMode()">排序: <b id="sortText">降序</b></button>
+              <button class="pill-btn" onclick="loadExamSampleData()">⚡ 载入评测用例</button>
+            </div>
+          </div>
+
+          <!-- 四则运算表达式输入（支持手机键盘与虚拟按键双模） -->
+          <div style="margin-bottom:10px;">
+            <div style="font-size:11px; color:var(--gold); margin-bottom:4px; display:flex; justify-content:space-between;">
+              <span>四则表达式 (如: (1-2*3)/4 或 (P1-P2*P3)/P4)</span>
+              <span style="color:var(--text-dim);">支持手机键盘直接打字</span>
+            </div>
+            <input type="text" id="exprInput" class="calc-input" placeholder="输入编号与运算符..."
+                   autocomplete="off" onfocus="setActiveInput('exprInput')">
+          </div>
+
+          <!-- 运算参数行（x / n / a / b / m） -->
+          <div style="display:grid; grid-template-columns:repeat(5, 1fr); gap:4px; margin-bottom:10px;">
+            <div>
+              <div style="font-size:10px; color:var(--text-dim); text-align:center;">自变量 x</div>
+              <input type="text" id="param_x" class="calc-input" style="height:30px; text-align:center;" value="2" inputmode="decimal" onfocus="setActiveInput('param_x')">
+            </div>
+            <div>
+              <div style="font-size:10px; color:var(--text-dim); text-align:center;">阶数 n</div>
+              <input type="text" id="param_n" class="calc-input" style="height:30px; text-align:center;" value="1" inputmode="numeric" onfocus="setActiveInput('param_n')">
+            </div>
+            <div>
+              <div style="font-size:10px; color:var(--text-dim); text-align:center;">下限 a</div>
+              <input type="text" id="param_a" class="calc-input" style="height:30px; text-align:center;" value="0" inputmode="decimal" onfocus="setActiveInput('param_a')">
+            </div>
+            <div>
+              <div style="font-size:10px; color:var(--text-dim); text-align:center;">上限 b</div>
+              <input type="text" id="param_b" class="calc-input" style="height:30px; text-align:center;" value="1" inputmode="decimal" onfocus="setActiveInput('param_b')">
+            </div>
+            <div>
+              <div style="font-size:10px; color:var(--text-dim); text-align:center;">幂次 m</div>
+              <input type="text" id="param_m" class="calc-input" style="height:30px; text-align:center;" value="2" inputmode="numeric" onfocus="setActiveInput('param_m')">
+            </div>
+          </div>
+
+          <!-- 功能操作键 -->
+          <div class="op-grid">
+            <button class="op-btn" onclick="executeBinary('add')">求和 (A+B)</button>
+            <button class="op-btn" onclick="executeBinary('sub')">求差 (A-B)</button>
+            <button class="op-btn" onclick="executeBinary('mul')">求积 (A*B)</button>
+            <button class="op-btn" onclick="executeBinary('div')">求商 (A/B)</button>
+            <button class="op-btn" onclick="executeSingle('eval')">求值 f(x)</button>
+            <button class="op-btn" onclick="executeSingle('diff')">n阶微分</button>
+            <button class="op-btn" onclick="executeSingle('indef')">不定积分 ∫</button>
+            <button class="op-btn" onclick="executeSingle('def')">定积分 [a,b]</button>
+            <button class="op-btn" onclick="executeSingle('power')">乘方 A^m</button>
+            <button class="op-btn" onclick="appendSelectedToExpr()">+A到式子</button>
+            <button class="op-btn warn" onclick="clearSelected()">清空 A</button>
+            <button class="op-btn warn" onclick="destroySelected()">销毁 A</button>
+          </div>
+
+          <!-- 触控/鼠标数字键盘 -->
+          <div class="soft-pad">
+            <button class="key-btn" onclick="pressKey('P')">P</button>
+            <button class="key-btn" onclick="pressKey('(')">(</button>
+            <button class="key-btn" onclick="pressKey(')')">)</button>
+            <button class="key-btn" onclick="pressBackspace()">⌫</button>
+            <button class="key-btn warn" onclick="pressClearActive()">CE</button>
+
+            <button class="key-btn num" onclick="pressKey('7')">7</button>
+            <button class="key-btn num" onclick="pressKey('8')">8</button>
+            <button class="key-btn num" onclick="pressKey('9')">9</button>
+            <button class="key-btn" onclick="pressKey('/')">/</button>
+            <button class="key-btn" onclick="pressKey('^')">^</button>
+
+            <button class="key-btn num" onclick="pressKey('4')">4</button>
+            <button class="key-btn num" onclick="pressKey('5')">5</button>
+            <button class="key-btn num" onclick="pressKey('6')">6</button>
+            <button class="key-btn" onclick="pressKey('*')">*</button>
+            <button class="key-btn" onclick="pressKey('x')">x</button>
+
+            <button class="key-btn num" onclick="pressKey('1')">1</button>
+            <button class="key-btn num" onclick="pressKey('2')">2</button>
+            <button class="key-btn num" onclick="pressKey('3')">3</button>
+            <button class="key-btn" onclick="pressKey('-')">-</button>
+            <button class="key-btn" onclick="pressToggleSign()">±</button>
+
+            <button class="key-btn num" onclick="pressKey('0')">0</button>
+            <button class="key-btn" onclick="pressKey('.')">.</button>
+            <button class="key-btn" onclick="pressKey('+')">+</button>
+            <button class="key-btn action-eval" onclick="evalFourOperations()">= 计算四则</button>
+          </div>
+        </div>
+
+        <!-- 右栏：多项式头指针数组 P（单链表结构）与便捷添加 -->
+        <div class="poly-box">
+          <div style="font-size:12px; color:var(--gold); font-weight:700; display:flex; justify-content:space-between;">
+            <span>头指针数组 P (N = <span id="uiCount">0</span>)</span>
+            <span style="font-size:11px; color:var(--text-dim);">头结点存放项数</span>
+          </div>
+
+          <div style="max-height:260px; overflow-y:auto; display:flex; flex-direction:column; gap:6px;" id="polyCardList"></div>
+
+          <!-- 便捷创建新多项式（整式输入 / 单项录入） -->
+          <div style="background:rgba(255,255,255,0.02); border:1px solid rgba(201,167,107,0.2); border-radius:8px; padding:8px;">
+            <div style="font-size:11.5px; color:var(--gold); margin-bottom:4px;">整式打字解析创建（支持手机打字）</div>
+            <div style="display:flex; gap:4px; margin-bottom:6px;">
+              <input type="text" id="quickStrInput" class="calc-input" style="height:32px;"
+                     placeholder="直接输入如: 3x^2 - 5x + 1" onfocus="setActiveInput('quickStrInput')">
+              <button class="pill-btn" style="background:rgba(201,167,107,0.25); color:#fff;" onclick="quickParseAdd()">解析保存</button>
+            </div>
+
+            <div style="font-size:11px; color:var(--text-dim); margin-bottom:4px;">或按项精准添加/修改:</div>
+            <div style="display:flex; gap:4px; align-items:center;">
+              <input type="text" id="termC" class="calc-input" style="height:30px;" placeholder="系数" inputmode="decimal" onfocus="setActiveInput('termC')">
+              <input type="text" id="termE" class="calc-input" style="height:30px;" placeholder="指数" inputmode="numeric" onfocus="setActiveInput('termE')">
+              <button class="pill-btn" onclick="addSingleTerm()">+添项</button>
+              <button class="pill-btn" style="background:var(--gold); color:#000; font-weight:700;" onclick="commitPendingPoly()">保存</button>
+            </div>
+            <div style="font-size:11px; font-family:var(--font-mono); color:var(--gold-light); margin-top:4px;" id="pendingTermsTxt">待存: (空)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 脚本驱动 -->
+  <script>
+    /* 1. 基础页面交互 */
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    window.addEventListener('scroll', function() {
+      document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 40);
+    });
+
+    const hamburger = document.getElementById('hamburger');
+    const navLinks = document.getElementById('navLinks');
+    hamburger.addEventListener('click', function() {
+      hamburger.classList.toggle('open');
+      navLinks.classList.toggle('open');
+    });
+
+    /* 优化淡入监听：安全兜底，绝不留白 */
+    document.body.classList.add('js-reveal-ready');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+    }, { threshold: 0.08 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    /* 2. 仿真计算器弹窗控制 */
+    function openCalcModal() {
+      document.getElementById('calcModalOverlay').classList.add('open');
+      document.body.style.overflow = 'hidden';
+      if (P_ARRAY.length === 0) loadExamSampleData();
+    }
+    function closeCalcModal() {
+      document.getElementById('calcModalOverlay').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    /* 3. 稀疏一元多项式核心数据结构（单链表带头结点） */
+    class PolyNode {
+      constructor(c, e) { this.coef = parseFloat(c); this.exp = parseInt(e); this.next = null; }
+    }
+    class Polynomial {
+      constructor() { this.head = new PolyNode(0, 0); }
+      get length() { return Math.round(this.head.coef); }
+      set length(v) { this.head.coef = v; }
+
+      insertTerm(c, e) {
+        if (Math.abs(c) < 1e-9) return;
+        let prev = this.head, curr = this.head.next;
+        while (curr && curr.exp > e) { prev = curr; curr = curr.next; }
+        if (curr && curr.exp === e) {
+          curr.coef += c;
+          if (Math.abs(curr.coef) < 1e-9) { prev.next = curr.next; this.length--; }
+        } else {
+          const n = new PolyNode(c, e);
+          n.next = curr; prev.next = n; this.length++;
+        }
+      }
+      clear() { this.head.next = null; this.length = 0; }
+      clone() {
+        const p = new Polynomial();
+        let curr = this.head.next;
+        while (curr) { p.insertTerm(curr.coef, curr.exp); curr = curr.next; }
+        return p;
+      }
+      getTerms(asc = false) {
+        const list = [];
+        let p = this.head.next;
+        while (p) { list.push({ coef: p.coef, exp: p.exp }); p = p.next; }
+        list.sort((a, b) => asc ? a.exp - b.exp : b.exp - a.exp);
+        return list;
+      }
+      toAlgebraicString(asc = false) {
+        const terms = this.getTerms(asc);
+        if (!terms.length) return "0";
+        let str = "";
+        terms.forEach((t, i) => {
+          let c = t.coef, e = t.exp;
+          let sign = c > 0 ? (i === 0 ? "" : " + ") : (i === 0 ? "-" : " - ");
+          let absC = Math.abs(c);
+          let cStr = (absC === 1 && e !== 0) ? "" : Number(absC.toFixed(4)).toString();
+          let termStr = e === 0 ? Number(absC.toFixed(4)).toString() : (e === 1 ? cStr + "x" : cStr + "x^" + (e < 0 ? `(${e})` : e));
+          str += sign + termStr;
+        });
+        return str;
+      }
+      evaluate(x) {
+        let sum = 0, p = this.head.next;
+        while (p) { sum += p.coef * Math.pow(x, p.exp); p = p.next; }
+        return sum;
+      }
+      derivative(n = 1) {
+        const res = new Polynomial();
+        let p = this.head.next;
+        while (p) {
+          let c = p.coef, e = p.exp;
+          for (let i = 0; i < n; i++) c *= (e - i);
+          if (Math.abs(c) > 1e-9) res.insertTerm(c, e - n);
+          p = p.next;
+        }
+        return res;
+      }
+      indefiniteIntegral() {
+        const res = new Polynomial();
+        let lnC = null, p = this.head.next;
+        while (p) {
+          if (p.exp === -1) lnC = p.coef;
+          else res.insertTerm(p.coef / (p.exp + 1), p.exp + 1);
+          p = p.next;
+        }
+        return { poly: res, lnC };
+      }
+      definiteIntegral(a, b) {
+        let sB = 0, sA = 0, p = this.head.next;
+        while (p) {
+          if (p.exp === -1) {
+            if (a <= 0 && b >= 0) return NaN;
+            sB += p.coef * Math.log(Math.abs(b)); sA += p.coef * Math.log(Math.abs(a));
+          } else {
+            const ne = p.exp + 1;
+            sB += (p.coef / ne) * Math.pow(b, ne); sA += (p.coef / ne) * Math.pow(a, ne);
+          }
+          p = p.next;
+        }
+        return sB - sA;
+      }
+    }
+
+    function addPoly(a, b) {
+      const r = a.clone();
+      let p = b.head.next;
+      while (p) { r.insertTerm(p.coef, p.exp); p = p.next; }
+      return r;
+    }
+    function subPoly(a, b) {
+      const r = a.clone();
+      let p = b.head.next;
+      while (p) { r.insertTerm(-p.coef, p.exp); p = p.next; }
+      return r;
+    }
+    function mulPoly(a, b) {
+      const r = new Polynomial();
+      let p1 = a.head.next;
+      while (p1) {
+        let p2 = b.head.next;
+        while (p2) { r.insertTerm(p1.coef * p2.coef, p1.exp + p2.exp); p2 = p2.next; }
+        p1 = p1.next;
+      }
+      return r;
+    }
+    function divPoly(a, b) {
+      if (!b.length) throw new Error("除式不能为0");
+      let rem = a.clone();
+      const quot = new Polynomial();
+      const leadB = b.getTerms(false)[0];
+      while (rem.length > 0) {
+        const leadR = rem.getTerms(false)[0];
+        if (leadR.exp < leadB.exp) break;
+        const qC = leadR.coef / leadB.coef, qE = leadR.exp - leadB.exp;
+        const termP = new Polynomial(); termP.insertTerm(qC, qE);
+        let t = termP.head.next; quot.insertTerm(t.coef, t.exp);
+        rem = subPoly(rem, mulPoly(termP, b));
+      }
+      return { quotient: quot, remainder: rem };
+    }
+    function powerPoly(a, m) {
+      let r = new Polynomial(); r.insertTerm(1, 0);
+      for (let i = 0; i < m; i++) r = mulPoly(r, a);
+      return r;
+    }
+
+    // 智能整式解析器（支持手机键盘直接打字如 3x^2 - 5x + 1）
+    function parsePolyString(s) {
+      const p = new Polynomial();
+      s = s.replace(/\s+/g, '');
+      if (!s) return p;
+      const pattern = /([+-]?(?:(?:\d+(?:\.\d*)?)|\.\d+)?)(?:x(?:\^\(?([+-]?\d+)\)?)?)?/gi;
+      let pos = 0;
+      while (pos < s.length) {
+        pattern.lastIndex = pos;
+        const m = pattern.exec(s);
+        if (!m || m.index !== pos || !m[0].length) break;
+        const rawC = m, rawE = m, full = m[0];
+        const hasX = /x/i.test(full);
+        let c = (!rawC || rawC === '+') ? (hasX ? 1 : 0) : (rawC === '-' ? (hasX ? -1 : 0) : parseFloat(rawC));
+        let e = hasX ? (rawE !== undefined ? parseInt(rawE) : 1) : 0;
+        p.insertTerm(c, e);
+        pos += full.length;
+      }
+      return p;
+    }
+
+    /* 4. 界面状态交互 */
+    const P_ARRAY = [];
+    let selA = null, selB = null, lastRes = null, isAsc = false;
+    let activeInputId = "exprInput";
+    let pendingPoly = new Polynomial();
+
+    function setActiveInput(id) { activeInputId = id; }
+
+    function pressKey(ch) {
+      const el = document.getElementById(activeInputId) || document.getElementById('exprInput');
+      const start = el.selectionStart || el.value.length;
+      el.value = el.value.substring(0, start) + ch + el.value.substring(el.selectionEnd || el.value.length);
+      el.focus();
+      el.setSelectionRange(start + ch.length, start + ch.length);
+    }
+    function pressBackspace() {
+      const el = document.getElementById(activeInputId) || document.getElementById('exprInput');
+      if (!el.value) return;
+      const start = el.selectionStart || el.value.length;
+      el.value = el.value.substring(0, Math.max(0, start - 1)) + el.value.substring(el.selectionEnd || el.value.length);
+      el.focus();
+      el.setSelectionRange(Math.max(0, start - 1), Math.max(0, start - 1));
+    }
+    function pressClearActive() {
+      const el = document.getElementById(activeInputId) || document.getElementById('exprInput');
+      el.value = ''; el.focus();
+    }
+    function pressToggleSign() {
+      const el = document.getElementById(activeInputId) || document.getElementById('exprInput');
+      el.value = el.value.startsWith('-') ? el.value.substring(1) : '-' + el.value;
+      el.focus();
+    }
+
+    function setLcd(status, sub, main) {
+      if (status) document.getElementById('lcdStatus').innerText = status;
+      if (sub !== null) document.getElementById('lcdSub').innerText = sub;
+      if (main !== null) document.getElementById('lcdMain').innerText = main;
+    }
+
+    function toggleSortMode() {
+      isAsc = !isAsc;
+      document.getElementById('sortText').innerText = isAsc ? "升序" : "降序";
+      renderList();
+      if (lastRes) document.getElementById('lcdMain').innerText = lastRes.toAlgebraicString(isAsc);
+    }
+
+    function loadExamSampleData() {
+      P_ARRAY.length = 0;
+      const p1 = new Polynomial(); p1.insertTerm(1, 2); P_ARRAY.push(p1); // x^2
+      const p2 = new Polynomial(); p2.insertTerm(1, 3); P_ARRAY.push(p2); // x^3
+      const p3 = new Polynomial(); p3.insertTerm(1, 0); p3.insertTerm(1, 1); P_ARRAY.push(p3); // 1+x
+      const p4 = new Polynomial(); p4.insertTerm(1, 1); P_ARRAY.push(p4); // x
+      selA = 0; selB = 1;
+      document.getElementById('exprInput').value = "(1-2*3)/4";
+      renderList();
+      setLcd("已载入评测用例", "四则算式: (1-2*3)/4", P_ARRAY[0].toAlgebraicString(isAsc));
+    }
+
+    function renderList() {
+      document.getElementById('uiCount').innerText = P_ARRAY.length;
+      const box = document.getElementById('polyCardList');
+      box.innerHTML = '';
+      if (!P_ARRAY.length) {
+        box.innerHTML = '<div style="color:var(--text-dim); text-align:center; padding:20px;">列表为空，请在下方创建或载入评测用例</div>';
+        return;
+      }
+      P_ARRAY.forEach((poly, i) => {
+        const card = document.createElement('div');
+        card.className = 'poly-card-item' + (selA === i ? ' sel-a' : '') + (selB === i ? ' sel-b' : '');
+        
+        const terms = poly.getTerms(isAsc);
+        let chain = `<b>[头|${poly.length}]</b> &rarr; `;
+        if (!terms.length) chain += '<span style="color:var(--vermillion);">^</span>';
+        else { terms.forEach(t => chain += `[${t.coef}, ${t.exp}] &rarr; `); chain += '^'; }
+
+        card.innerHTML = `
+          <div style="display:flex; justify-content:space-between; font-weight:700;">
+            <span style="color:var(--gold);">P[${i}] &rarr; P${i+1}</span>
+            <span>${poly.toAlgebraicString(isAsc)}</span>
+          </div>
+          <div class="chain-txt">${chain}</div>
+          <div style="display:flex; gap:4px; flex-wrap:wrap; margin-top:4px;">
+            <button class="pill-btn" onclick="selA=${i}; renderList();">选为A</button>
+            <button class="pill-btn" onclick="selB=${i}; renderList();">选为B</button>
+            <button class="pill-btn" onclick="appendIdx(${i+1})">+式子</button>
+            <button class="pill-btn" onclick="P_ARRAY[${i}].clear(); renderList(); setLcd('已清空P${i+1}','','0');">清空</button>
+            <button class="pill-btn" style="color:#ffb8a6;" onclick="P_ARRAY.splice(${i},1); selA=null; selB=null; renderList(); setLcd('已销毁P${i+1}','','0');">销毁</button>
+          </div>
+        `;
+        box.appendChild(card);
+      });
+      document.getElementById('lcdSelNotice').innerText = `A = ${selA !== null ? 'P'+(selA+1) : '未选'}, B = ${selB !== null ? 'P'+(selB+1) : '未选'}`;
+    }
+
+    function appendIdx(n) {
+      const el = document.getElementById('exprInput');
+      el.value += (!el.value || '+-*/('.includes(el.value.slice(-1))) ? n : '*' + n;
+      el.focus();
+    }
+    function appendSelectedToExpr() {
+      if (selA === null) { alert("请先在右侧选择多项式A"); return; }
+      appendIdx(selA + 1);
+    }
+
+    /* 整式快速解析与逐项添加 */
+    function quickParseAdd() {
+      const s = document.getElementById('quickStrInput').value.trim();
+      if (!s) return;
+      const poly = parsePolyString(s);
+      if (!poly.length) { alert("未能识别出有效项！"); return; }
+      P_ARRAY.push(poly);
+      document.getElementById('quickStrInput').value = '';
+      setLcd(`多项式 P${P_ARRAY.length} 创建成功`, "整式自动解析", poly.toAlgebraicString(isAsc));
+      renderList();
+    }
+
+    function addSingleTerm() {
+      const c = parseFloat(document.getElementById('termC').value);
+      const e = parseInt(document.getElementById('termE').value);
+      if (isNaN(c) || isNaN(e)) { alert("请输入合法的数字系数和整数指数！"); return; }
+      pendingPoly.insertTerm(c, e);
+      document.getElementById('termC').value = '';
+      document.getElementById('termE').value = '';
+      document.getElementById('pendingTermsTxt').innerText = "待存: " + pendingPoly.toAlgebraicString(isAsc);
+    }
+    function commitPendingPoly() {
+      if (!pendingPoly.length) return;
+      P_ARRAY.push(pendingPoly.clone());
+      pendingPoly.clear();
+      document.getElementById('pendingTermsTxt').innerText = "待存: (空)";
+      setLcd(`多项式 P${P_ARRAY.length} 保存成功`, "", P_ARRAY[P_ARRAY.length-1].toAlgebraicString(isAsc));
+      renderList();
+    }
+
+    /* 双目与单目运算 */
+    function executeBinary(op) {
+      if (selA === null || selB === null) { alert("请在右侧先选定 A 与 B！"); return; }
+      const pA = P_ARRAY[selA], pB = P_ARRAY[selB];
+      try {
+        if (op === 'add') lastRes = addPoly(pA, pB);
+        else if (op === 'sub') lastRes = subPoly(pA, pB);
+        else if (op === 'mul') lastRes = mulPoly(pA, pB);
+        else if (op === 'div') {
+          const res = divPoly(pA, pB);
+          lastRes = res.quotient;
+          setLcd(`求除完成`, `商 Q: ${res.quotient.toAlgebraicString(isAsc)}`, `商: ${res.quotient.toAlgebraicString(isAsc)} | 余: ${res.remainder.toAlgebraicString(isAsc)}`);
+          return;
+        }
+        setLcd(`运算完成`, `${pA.toAlgebraicString(isAsc)} 与 ${pB.toAlgebraicString(isAsc)}`, lastRes.toAlgebraicString(isAsc));
+      } catch (e) { alert(e.message); }
+    }
+
+    function executeSingle(op) {
+      if (selA === null) { alert("请在右侧选定多项式 A！"); return; }
+      const pA = P_ARRAY[selA];
+      if (op === 'eval') {
+        const x = parseFloat(document.getElementById('param_x').value);
+        setLcd(`求值 P${selA+1}(${x})`, `代入 x = ${x}`, String(Number(pA.evaluate(x).toFixed(6))));
+      } else if (op === 'diff') {
+        const n = parseInt(document.getElementById('param_n').value);
+        lastRes = pA.derivative(n);
+        setLcd(`求导完成: ${n}阶`, "", lastRes.toAlgebraicString(isAsc));
+      } else if (op === 'indef') {
+        const r = pA.indefiniteIntegral();
+        lastRes = r.poly;
+        let s = r.poly.toAlgebraicString(isAsc);
+        if (r.lnC) s = (s === "0" ? "" : s + " + ") + (r.lnC === 1 ? "" : r.lnC) + "ln|x|";
+        s += " + C";
+        setLcd("不定积分完成", "", s);
+      } else if (op === 'def') {
+        const a = parseFloat(document.getElementById('param_a').value);
+        const b = parseFloat(document.getElementById('param_b').value);
+        const val = pA.definiteIntegral(a, b);
+        setLcd(`定积分 [${a}, ${b}]`, "", isNaN(val) ? "奇异点不可积" : String(Number(val.toFixed(6))));
+      } else if (op === 'power') {
+        const m = parseInt(document.getElementById('param_m').value);
+        lastRes = powerPoly(pA, m);
+        setLcd(`乘方 (${selA+1})^${m}`, "", lastRes.toAlgebraicString(isAsc));
+      }
+    }
+
+    function clearSelected() { if (selA !== null) { P_ARRAY[selA].clear(); renderList(); } }
+    function destroySelected() { if (selA !== null) { P_ARRAY.splice(selA, 1); selA=null; selB=null; renderList(); } }
+
+    function saveResultToP() {
+      if (!lastRes) return;
+      P_ARRAY.push(lastRes.clone());
+      setLcd(`已追加为 P${P_ARRAY.length}`, "", lastRes.toAlgebraicString(isAsc));
+      renderList();
+    }
+
+    /* 四则运算逆波兰解析器 */
+    function evalFourOperations() {
+      const expr = document.getElementById('exprInput').value.trim();
+      if (!expr) return;
+      try {
+        const tokens = [];
+        let i = 0;
+        while (i < expr.length) {
+          let ch = expr[i];
+          if ('+-*/()'.includes(ch)) { tokens.push({ type: 'OP', val: ch }); i++; }
+          else if (ch === 'P' || ch === 'p' || /\d/.test(ch)) {
+            if (ch === 'P' || ch === 'p') i++;
+            let s = '';
+            while (i < expr.length && /\d/.test(expr[i])) { s += expr[i]; i++; }
+            tokens.push({ type: 'POLY', idx: parseInt(s) - 1 });
+          } else i++;
+        }
+        // 中缀转逆波兰
+        const out = [], ops = [], prec = { '+': 1, '-': 1, '*': 2, '/': 2 };
+        tokens.forEach(t => {
+          if (t.type === 'POLY') out.push(t);
+          else if (t.val === '(') ops.push(t.val);
+          else if (t.val === ')') {
+            while (ops.length && ops[ops.length-1] !== '(') out.push({ type:'OP', val: ops.pop() });
+            ops.pop();
+          } else {
+            while (ops.length && prec[ops[ops.length-1]] >= prec[t.val]) out.push({ type:'OP', val: ops.pop() });
+            ops.push(t.val);
+          }
+        });
+        while (ops.length) out.push({ type:'OP', val: ops.pop() });
+
+        // 逆波兰求值
+        const st = [];
+        out.forEach(t => {
+          if (t.type === 'POLY') {
+            if (!P_ARRAY[t.idx]) throw new Error(`多项式 P${t.idx+1} 不存在`);
+            st.push(P_ARRAY[t.idx]);
+          } else {
+            const b = st.pop(), a = st.pop();
+            if (t.val === '+') st.push(addPoly(a, b));
+            else if (t.val === '-') st.push(subPoly(a, b));
+            else if (t.val === '*') st.push(mulPoly(a, b));
+            else if (t.val === '/') st.push(divPoly(a, b).quotient);
+          }
+        });
+        lastRes = st[0];
+        setLcd("四则计算完成", expr, lastRes.toAlgebraicString(isAsc));
+      } catch (e) { alert("表达式错误: " + e.message); }
+    }
+  </script>
+</body>
+</html>
